@@ -571,7 +571,7 @@
           const res = await fetch(`${AUTH_API_URL}/search?username=${username}`);
           const data = await res.json();
           if (data && data.length > 0) {
-            const userMatch = data.find(u => u.password === password);
+            const userMatch = data.find(u => u["pasword "] === password || u.password === password);
             if (userMatch) account = userMatch;
           }
         }
@@ -579,7 +579,7 @@
         if (account) {
           sessionStorage.setItem("spms_user", JSON.stringify({
             username: account.username,
-            name:     account.name,
+            name:     account.name || account.username.split("@")[0].charAt(0).toUpperCase() + account.username.split("@")[0].slice(1),
             role:     account.role,
             loginAt:  new Date().toISOString()
           }));
@@ -660,19 +660,22 @@
           throw new Error("Email/Username sudah digunakan!");
         }
 
-        // Save to SheetDB
+        // Save to SheetDB (using the misspelled column 'pasword ' to match the user's Google Sheet)
         const newUser = {
           username: user,
-          password: pass,
-          role: regRole,
-          name: user.split("@")[0].charAt(0).toUpperCase() + user.split("@")[0].slice(1)
+          "pasword ": pass,
+          role: regRole
         };
 
-        await fetch(AUTH_API_URL, {
+        const response = await fetch(AUTH_API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ data: [newUser] })
         });
+
+        if (!response.ok) {
+          throw new Error("Gagal menyimpan ke Google Sheets! Pastikan Anda sudah membuat kolom username, password, role, name di baris pertama.");
+        }
 
         // Show success
         btnRegister.classList.remove("loading");
