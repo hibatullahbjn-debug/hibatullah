@@ -7,791 +7,442 @@
   <meta name="description" content="Login ke Sistem Pengadaan & Manajemen Sekolah (SPMS)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* =====================================================
-       RESET & BASE
-    ===================================================== */
+    /* RESET */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #080f1e;
+      font-family: 'Inter', sans-serif;
+      background: #eff1f9;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      position: relative;
-      color: #fff;
+      color: #111827;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ---- Animated Background ---- */
-    .bg-gradient {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(255,107,0,0.18) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 90%, rgba(37,99,235,0.15) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 60% 40%, rgba(5,150,105,0.08) 0%, transparent 60%),
-        #080f1e;
-    }
-
-    /* Floating orbs */
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.4;
-      animation: floatOrb 12s ease-in-out infinite;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .orb-1 {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(255,107,0,0.5), transparent);
-      top: -100px; left: -100px;
-      animation-delay: 0s;
-    }
-
-    .orb-2 {
-      width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba(37,99,235,0.4), transparent);
-      bottom: -80px; right: -80px;
-      animation-delay: -4s;
-    }
-
-    .orb-3 {
-      width: 250px; height: 250px;
-      background: radial-gradient(circle, rgba(5,150,105,0.3), transparent);
-      top: 50%; left: 60%;
-      animation-delay: -8s;
-    }
-
-    @keyframes floatOrb {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33%       { transform: translate(30px, -20px) scale(1.05); }
-      66%       { transform: translate(-20px, 30px) scale(0.95); }
-    }
-
-    /* Grid lines decoration */
-    .bg-grid {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
-
-    /* =====================================================
-       MAIN LAYOUT: Split Panel
-    ===================================================== */
-    .login-wrapper {
-      position: relative;
-      z-index: 10;
-      display: flex;
+    /* CARD CONTAINER */
+    .card-container {
       width: 100%;
-      max-width: 960px;
-      min-height: 580px;
-      margin: 20px;
+      max-width: 1050px;
+      min-height: 640px;
+      background: #ffffff;
       border-radius: 28px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.06);
+      display: flex;
+      margin: 20px;
       overflow: hidden;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
-      animation: wrapperIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
-    @keyframes wrapperIn {
-      from { opacity: 0; transform: scale(0.94) translateY(30px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    /* ---- Left Panel: Branding ---- */
-    .brand-panel {
-      flex: 1;
-      background: linear-gradient(145deg, #0f1f3d 0%, #0c1220 50%, #0a1628 100%);
-      padding: 52px 48px;
+    /* =========================================
+       LEFT PANEL: Mesh Gradient & Branding
+    ========================================= */
+    .left-panel {
+      width: 48%;
+      margin: 12px;
+      border-radius: 24px;
+      padding: 40px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       overflow: hidden;
-      border-right: 1px solid rgba(255,255,255,0.06);
+      /* Complex mesh gradient simulation */
+      background: 
+        radial-gradient(circle at 10% 10%, #7fd1f9 0%, transparent 40%),
+        radial-gradient(circle at 90% 20%, #d8b4fe 0%, transparent 40%),
+        radial-gradient(circle at 30% 90%, #6366f1 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, #a78bfa 0%, transparent 50%),
+        #2563eb; /* base solid blue */
+      color: white;
     }
 
-    /* Decorative arc */
-    .brand-panel::after {
-      content: '';
-      position: absolute;
-      right: -120px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 300px;
-      height: 300px;
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 50%;
-    }
-
-    .brand-panel::before {
-      content: '';
-      position: absolute;
-      right: -60px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 180px;
-      height: 180px;
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 50%;
-    }
-
-    .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .brand-logo-mark {
-      width: 46px;
-      height: 46px;
-      background: linear-gradient(135deg, #ff6b00, #ff9240);
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 20px rgba(255,107,0,0.4);
-    }
-
-    .brand-logo-mark svg { width: 24px; height: 24px; }
-
-    .brand-logo-text {
+    .left-panel-content {
+      position: relative;
+      z-index: 2;
       display: flex;
       flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
     }
 
-    .brand-name {
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: 0.5px;
-      color: #fff;
+    /* Asterisk Logo Icon */
+    .icon-asterisk {
+      width: 42px;
+      height: 42px;
+    }
+    .icon-asterisk path {
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
-    .brand-tagline {
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
-      font-weight: 500;
+    .brand-bottom {
+      max-width: 85%;
     }
-
-    .brand-hero {
-      position: relative;
-      z-index: 1;
-    }
-
     .brand-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,107,0,0.15);
-      border: 1px solid rgba(255,107,0,0.25);
-      border-radius: 20px;
-      padding: 5px 14px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #ff9240;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    .brand-eyebrow-dot {
-      width: 6px; height: 6px;
-      background: #ff9240;
-      border-radius: 50%;
-      animation: blink 2s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
-    }
-
-    .brand-title {
-      font-size: 36px;
-      font-weight: 900;
-      line-height: 1.15;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
-      color: #fff;
-    }
-
-    .brand-title span {
-      background: linear-gradient(90deg, #ff9240, #ffcc00);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .brand-desc {
       font-size: 14px;
-      color: rgba(255,255,255,0.45);
-      line-height: 1.7;
-      max-width: 300px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      opacity: 0.9;
     }
-
-    /* Feature pills */
-    .brand-features {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .feature-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.55);
-    }
-
-    .feature-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.05);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .feature-icon svg { width: 14px; height: 14px; }
-
-    /* ---- Right Panel: Form ---- */
-    .form-panel {
-      width: 420px;
-      background: #ffffff;
-      padding: 52px 44px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 0;
-    }
-
-    .form-panel-header {
-      margin-bottom: 36px;
-    }
-
-    .form-greeting {
-      font-size: 12px;
+    .brand-title {
+      font-size: 32px;
       font-weight: 700;
-      color: #ff6b00;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-    }
-
-    .form-title {
-      font-size: 28px;
-      font-weight: 900;
-      color: #0f172a;
+      line-height: 1.25;
       letter-spacing: -0.5px;
-      line-height: 1.2;
-      margin-bottom: 8px;
     }
 
-    .form-subtitle {
-      font-size: 13px;
-      color: #64748b;
+    /* =========================================
+       RIGHT PANEL: Form Area
+    ========================================= */
+    .right-panel {
+      width: 52%;
+      padding: 50px 70px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .icon-asterisk-blue {
+      width: 32px;
+      height: 32px;
+      color: #4f46e5;
+      margin-bottom: 24px;
+    }
+
+    .form-header h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .form-header p {
+      font-size: 14px;
+      color: #6b7280;
       line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* Views */
+    #view-login, #view-register {
+      width: 100%;
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Form Fields */
-    .login-form {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
+    .input-group {
+      margin-bottom: 20px;
     }
-
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
+    .input-group label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 8px;
     }
-
-    .field-label {
-      font-size: 11px;
-      font-weight: 800;
-      color: #475569;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-    }
-
-    .field-input-wrap {
+    .input-wrapper {
       position: relative;
-      display: flex;
-      align-items: center;
     }
-
-    .field-icon {
-      position: absolute;
-      left: 14px;
-      color: #94a3b8;
-      display: flex;
-      align-items: center;
-    }
-
-    .field-icon svg { width: 16px; height: 16px; }
-
-    .field-input {
+    .input-wrapper input {
       width: 100%;
-      padding: 13px 16px 13px 42px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 12px;
+      height: 48px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 0 16px;
       font-size: 14px;
-      font-weight: 500;
-      color: #0f172a;
       font-family: inherit;
-      background: #f8fafc;
-      transition: all 0.25s ease;
+      color: #111827;
+      transition: all 0.2s;
+    }
+    .input-wrapper input::placeholder { color: #9ca3af; }
+    .input-wrapper input:focus {
       outline: none;
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
     }
-
-    .field-input:focus {
-      border-color: #ff6b00;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(255,107,0,0.1);
-    }
-
-    .field-input::placeholder { color: #cbd5e1; }
-
-    /* Toggle password visibility */
+    
     .btn-eye {
       position: absolute;
-      right: 14px;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
       background: none;
       border: none;
+      color: #9ca3af;
       cursor: pointer;
-      color: #94a3b8;
       display: flex;
-      align-items: center;
-      transition: color 0.2s;
-      padding: 2px;
+      padding: 4px;
     }
+    .btn-eye:hover { color: #4b5563; }
+    .btn-eye svg { width: 18px; height: 18px; }
 
-    .btn-eye:hover { color: #ff6b00; }
-    .btn-eye svg { width: 16px; height: 16px; }
-
-    /* Role selector */
-    .role-selector {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-    }
-
-    .role-btn {
-      padding: 10px 6px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 10px;
-      background: #f8fafc;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-      font-family: inherit;
-    }
-
-    .role-btn-icon {
-      font-size: 18px;
-      margin-bottom: 3px;
-    }
-
-    .role-btn-label {
-      display: block;
-      font-size: 10px;
-      font-weight: 700;
-      color: #64748b;
-      letter-spacing: 0.3px;
-    }
-
-    .role-btn:hover {
-      border-color: rgba(255,107,0,0.4);
-      background: rgba(255,107,0,0.04);
-    }
-
-    .role-btn.active {
-      border-color: #ff6b00;
-      background: rgba(255,107,0,0.07);
-    }
-
-    .role-btn.active .role-btn-label { color: #ff6b00; }
-
-    /* Error state */
-    .error-msg {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      background: #fff1f0;
-      border: 1px solid #ffc5c0;
-      border-radius: 10px;
-      padding: 11px 14px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #dc2626;
-    }
-
-    .error-msg.show { display: flex; }
-    .error-msg svg { width: 15px; height: 15px; flex-shrink: 0; }
-
-    /* Submit button */
-    .btn-login {
+    /* Button */
+    .btn-primary {
       width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #ff6b00, #ff8c3a);
+      height: 48px;
+      background: #4f46e5;
+      color: white;
       border: none;
-      border-radius: 14px;
-      color: #fff;
+      border-radius: 8px;
       font-size: 15px;
-      font-weight: 800;
+      font-weight: 600;
       font-family: inherit;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
       display: flex;
-      align-items: center;
       justify-content: center;
-      gap: 10px;
-      box-shadow: 0 8px 24px rgba(255,107,0,0.35);
-      margin-top: 4px;
-      letter-spacing: 0.2px;
-    }
-
-    .btn-login:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 32px rgba(255,107,0,0.45);
-    }
-
-    .btn-login:active { transform: translateY(0); }
-    .btn-login svg { width: 18px; height: 18px; }
-
-    /* Register outline button */
-    .btn-register-outline {
-      width: 100%;
-      padding: 15px;
-      background: transparent;
-      border: 2px solid var(--clr-primary);
-      border-radius: 14px;
-      color: var(--clr-primary);
-      font-size: 15px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 12px;
+      margin-top: 10px;
     }
-    .btn-register-outline:hover {
-      background: rgba(255, 107, 0, 0.08);
-      transform: translateY(-2px);
+    .btn-primary:hover {
+      background: #4338ca;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
     }
-    .btn-register-outline:active { transform: translateY(0); }
-    .btn-register-outline svg { width: 18px; height: 18px; }
+    .btn-primary:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
 
-    /* Loading spinner inside button */
+    /* Error Text */
+    .error-text {
+      color: #ef4444;
+      font-size: 13px;
+      margin-top: 6px;
+      display: none;
+    }
+    .error-text.show { display: block; }
+
+    /* Spinner */
     .spinner {
       display: none;
-      width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,0.3);
+      width: 20px;
+      height: 20px;
+      border: 2.5px solid rgba(255,255,255,0.3);
       border-top-color: #fff;
       border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      animation: spin 0.8s linear infinite;
     }
-
+    .btn-primary.loading .spinner { display: block; }
+    .btn-primary.loading span { display: none; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .btn-login.loading .spinner { display: block; }
-    .btn-login.loading .btn-login-text,
-    .btn-login.loading .btn-login-icon { display: none; }
-
-    /* Demo credentials hint */
-    .demo-hint {
-      margin-top: 20px;
-      background: #f0f9ff;
-      border: 1px solid #bae6fd;
-      border-radius: 12px;
-      padding: 14px 16px;
-    }
-
-    .demo-hint-title {
-      font-size: 11px;
-      font-weight: 800;
-      color: #0369a1;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+    /* Separator */
+    .separator {
       display: flex;
       align-items: center;
-      gap: 6px;
+      text-align: center;
+      margin: 28px 0;
+      color: #9ca3af;
+      font-size: 12px;
+    }
+    .separator::before, .separator::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .separator span {
+      padding: 0 12px;
     }
 
-    .demo-hint-title svg { width: 13px; height: 13px; }
-
-    .demo-rows { display: flex; flex-direction: column; gap: 4px; }
-
-    .demo-row {
+    /* Social Buttons */
+    .social-btns {
       display: flex;
-      justify-content: space-between;
-      font-size: 12px;
+      gap: 12px;
     }
-
-    .demo-key { color: #64748b; font-weight: 600; }
-    .demo-val {
-      font-weight: 700;
-      color: #0369a1;
-      background: rgba(14,165,233,0.1);
-      padding: 1px 8px;
-      border-radius: 6px;
+    .social-btn {
+      flex: 1;
+      height: 38px;
+      background: #f3f4f6;
+      border: none;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
-      font-family: monospace;
-      font-size: 12px;
       transition: background 0.2s;
     }
+    .social-btn:hover { background: #e5e7eb; }
+    .social-btn svg { width: 16px; height: 16px; }
 
-    .demo-val:hover { background: rgba(14,165,233,0.2); }
+    /* Footer Text */
+    .form-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .form-footer a {
+      color: #4f46e5;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .form-footer a:hover { text-decoration: underline; }
 
-    /* =====================================================
-       RESPONSIVE
-    ===================================================== */
-    @media (max-width: 780px) {
-      .brand-panel { display: none; }
-      .login-wrapper { max-width: 440px; border-radius: 24px; }
-      .form-panel { width: 100%; padding: 40px 32px; }
+    /* Role Pills for Register */
+    .role-pills {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .role-pill {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      background: white;
+      color: #4b5563;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .role-pill.active {
+      background: #eef2ff;
+      border-color: #4f46e5;
+      color: #4f46e5;
     }
 
-    @media (max-width: 480px) {
-      .form-panel { padding: 32px 24px; }
-      .login-wrapper { margin: 12px; }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .card-container { flex-direction: column; border-radius: 0; min-height: 100vh; margin: 0; }
+      .left-panel { width: auto; min-height: 250px; margin: 0; border-radius: 0; padding: 30px; }
+      .right-panel { width: 100%; padding: 40px 30px; }
+      .icon-asterisk-blue { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <div class="bg-gradient"></div>
-  <div class="bg-grid"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+  <div class="card-container">
+    
+    <!-- LEFT PANEL: Brand & Gradient -->
+    <div class="left-panel">
+      <div class="left-panel-content">
+        <!-- Asterisk Logo -->
+        <svg class="icon-asterisk" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2v20M2.5 7l19 10M2.5 17l19-10" />
+        </svg>
 
-  <div class="login-wrapper">
-
-    <!-- ===== LEFT: Branding ===== -->
-    <div class="brand-panel">
-      <div class="brand-logo">
-        <div class="brand-logo-mark">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-        </div>
-        <div class="brand-logo-text">
-          <span class="brand-name">SPMS</span>
-          <span class="brand-tagline">Procurement System</span>
-        </div>
-      </div>
-
-      <div class="brand-hero">
-        <div class="brand-eyebrow">
-          <span class="brand-eyebrow-dot"></span>
-          Platform Pengadaan
-        </div>
-        <h2 class="brand-title">Kelola Pengadaan<br>Sekolah <span>Lebih Cerdas</span></h2>
-        <p class="brand-desc">Sistem terpadu untuk manajemen pengadaan barang Kepesantrenan, SMK, dan SMP — efisien, transparan, dan terstruktur.</p>
-      </div>
-
-      <div class="brand-features">
-        <div class="feature-item">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#ff9240" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          Pengadaan 3 Unit Sekolah Terintegrasi
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          Tanda Tangan Digital Terverifikasi
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          </div>
-          Laporan & Statistik Real-time
+        <div class="brand-bottom">
+          <p class="brand-eyebrow">Mudah & Terpadu</p>
+          <h1 class="brand-title">Akses sistem pengadaan sekolah Anda dengan jelas dan produktif</h1>
         </div>
       </div>
     </div>
 
-    <!-- ===== RIGHT: Form ===== -->
-    <div class="form-panel">
+    <!-- RIGHT PANEL: Form Area -->
+    <div class="right-panel">
       
-      <div class="form-panel-header">
-        <p class="form-greeting">Selamat Datang 👋</p>
-        <h1 class="form-title">Masuk ke SPMS</h1>
-        <p class="form-subtitle">Silakan masukkan akun Anda untuk mengakses sistem pengadaan sekolah.</p>
-      </div>
+      <!-- Asterisk Logo (Blue) -->
+      <svg class="icon-asterisk-blue" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2v20M2.5 7l19 10M2.5 17l19-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
 
-      <!-- LOGIN VIEW -->
+      <!-- ================= LOGIN VIEW ================= -->
       <div id="view-login">
-
-      <!-- Role Selector -->
-      <div class="field-group" style="margin-bottom: 6px;">
-        <label class="field-label">Masuk sebagai</label>
-        <div class="role-selector">
-          <button type="button" class="role-btn active" data-role="direktur" id="role-direktur">
-            <div class="role-btn-icon">👔</div>
-            <span class="role-btn-label">Direktur</span>
-          </button>
-          <button type="button" class="role-btn" data-role="inventaris" id="role-inventaris">
-            <div class="role-btn-icon">📦</div>
-            <span class="role-btn-label">Inventaris</span>
-          </button>
-          <button type="button" class="role-btn" data-role="admin" id="role-admin">
-            <div class="role-btn-icon">🛡️</div>
-            <span class="role-btn-label">Admin</span>
-          </button>
+        <div class="form-header">
+          <h2 id="login-title">Masuk ke Akun</h2>
+          <p>Akses tugas, pengadaan, dan log proyek Anda kapan saja, di mana saja — tersimpan dalam satu tempat.</p>
         </div>
-      </div>
 
-      <form class="login-form" id="login-form" novalidate>
-
-        <!-- Username -->
-          <div class="field-group">
-            <label class="field-label" for="input-username">Username</label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              </span>
-              <input type="text" id="input-username" class="field-input" placeholder="Masukkan username..." autocomplete="username" spellcheck="false">
+        <form id="login-form" novalidate>
+          <div class="input-group">
+            <label for="login-email">Username / Email</label>
+            <div class="input-wrapper">
+              <input type="text" id="login-email" placeholder="Ketik username Anda..." autocomplete="username" spellcheck="false" required>
             </div>
           </div>
-        </div>
 
-        <!-- Password -->
-        <div class="field-group">
-          <label class="field-label" for="input-password">Password</label>
-          <div class="field-input-wrap">
-            <span class="field-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </span>
-            <input type="password" id="input-password" class="field-input" placeholder="Masukkan password..." autocomplete="current-password">
-            <button type="button" class="btn-eye" id="btn-toggle-pass" title="Lihat password">
-              <svg id="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Error Message -->
-        <div class="error-msg" id="error-msg">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <span id="error-text">Username atau password salah.</span>
-        </div>
-
-        <!-- Submit -->
-        <button type="submit" class="btn-login" id="btn-login">
-          <svg class="btn-login-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          <span class="btn-login-text">Masuk ke Dashboard</span>
-          <div class="spinner"></div>
-        </button>
-        
-        <button type="button" class="btn-register-outline" id="btn-show-register">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-          <span>Buat Akun Baru</span>
-        </button>
-      </form>
-
-      <!-- Demo Credentials -->
-      <div class="demo-hint">
-        <div class="demo-hint-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Demo Akun — Klik untuk salin
-        </div>
-        <div class="demo-rows">
-          <div class="demo-row">
-            <span class="demo-key">Username</span>
-            <span class="demo-val" id="demo-user" title="Klik untuk isi otomatis">nama</span>
-          </div>
-          <div class="demo-row">
-            <span class="demo-key">Password</span>
-            <span class="demo-val" id="demo-pass" title="Klik untuk isi otomatis">hibatullah maju</span>
-          </div>
-        </div>
-      </div>
-      
-      </div> <!-- End view-login -->
-
-      <!-- REGISTER VIEW -->
-      <div id="view-register" style="display: none;">
-        <form id="register-form">
-          <div class="field-group">
-            <label class="field-label">Pilih Peran Akun</label>
-            <div class="role-selector" style="margin-bottom: 20px;">
-              <button type="button" class="role-btn reg-role-btn active" data-role="inventaris">
-                <div class="role-btn-icon">📦</div>
-                <span class="role-btn-label">Inventaris</span>
-              </button>
-              <button type="button" class="role-btn reg-role-btn" data-role="direktur">
-                <div class="role-btn-icon">👑</div>
-                <span class="role-btn-label">Direktur</span>
-              </button>
-              <button type="button" class="role-btn reg-role-btn" data-role="admin">
-                <div class="role-btn-icon">🛡️</div>
-                <span class="role-btn-label">Admin</span>
+          <div class="input-group">
+            <label for="login-password">Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" required>
+              <button type="button" class="btn-eye" id="toggle-login-pass" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               </button>
             </div>
-          </div>
-          
-          <div class="field-group">
-            <label class="field-label" for="reg-username">Email / Username Baru</label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              </span>
-              <input type="text" id="reg-username" class="field-input" placeholder="contoh@gmail.com / username" required autocomplete="off">
-            </div>
+            <div class="error-text" id="login-error-text">Username atau password salah.</div>
           </div>
 
-          <div class="field-group">
-            <label class="field-label" for="reg-password">Password Baru</label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              </span>
-              <input type="password" id="reg-password" class="field-input" placeholder="Buat password..." required>
-            </div>
-          </div>
-
-          <div class="error-msg" id="reg-error-msg">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <span id="reg-error-text">Email sudah digunakan.</span>
-          </div>
-
-          <button type="submit" class="btn-login" id="btn-register">
-            <span class="btn-login-text">Buat Akun</span>
+          <button type="submit" class="btn-primary" id="btn-login">
+            <span>Get Started</span>
             <div class="spinner"></div>
           </button>
-          <div style="text-align: center; margin-top: 15px;">
-            <a href="#" id="btn-show-login" style="color: var(--clr-muted); font-size: 14px; text-decoration: none;">Kembali ke Halaman Login</a>
-          </div>
         </form>
+
+        <div class="separator"><span>atau masuk dengan akun</span></div>
+
+        <div class="social-btns">
+          <!-- Demo Accounts mapped to social buttons for easy testing -->
+          <button class="social-btn" title="Demo Direktur" id="demo-direktur">👔</button>
+          <button class="social-btn" title="Demo Inventaris" id="demo-inventaris">📦</button>
+          <button class="social-btn" title="Demo Admin" id="demo-admin">🛡️</button>
+        </div>
+
+        <div class="form-footer">
+          Belum punya akun? <a href="#" id="link-show-register">Sign up</a>
+        </div>
+      </div>
+
+      <!-- ================= REGISTER VIEW ================= -->
+      <div id="view-register" style="display: none;">
+        <div class="form-header">
+          <h2>Buat Akun Baru</h2>
+          <p>Daftarkan akun SPMS Anda untuk memulai manajemen logistik yang lebih terstruktur dan rapi.</p>
+        </div>
+
+        <form id="register-form" novalidate>
+          
+          <label style="display: block; font-size: 13.5px; font-weight: 600; color: #374151; margin-bottom: 8px;">Pilih Peran Akun</label>
+          <div class="role-pills">
+            <button type="button" class="role-pill active" data-role="inventaris">Inventaris</button>
+            <button type="button" class="role-pill" data-role="direktur">Direktur</button>
+            <button type="button" class="role-pill" data-role="admin">Admin</button>
+          </div>
+
+          <div class="input-group">
+            <label for="reg-email">Username / Email Baru</label>
+            <div class="input-wrapper">
+              <input type="text" id="reg-email" placeholder="contoh@gmail.com" required>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="reg-password">Password Baru</label>
+            <div class="input-wrapper">
+              <input type="password" id="reg-password" placeholder="••••••••" required>
+              <button type="button" class="btn-eye" id="toggle-reg-pass" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="error-text" id="reg-error-text">Email sudah digunakan.</div>
+          </div>
+
+          <button type="submit" class="btn-primary" id="btn-register">
+            <span>Daftar Sekarang</span>
+            <div class="spinner"></div>
+          </button>
+        </form>
+
+        <div class="form-footer">
+          Sudah punya akun? <a href="#" id="link-show-login">Masuk di sini</a>
+        </div>
       </div>
 
     </div>
-
   </div>
 
   <script>
@@ -800,9 +451,6 @@
     // =====================================================
     const AUTH_API_URL = "https://sheetdb.io/api/v1/2hbuzs32m6bvw";
 
-    // =====================================================
-    // ACCOUNTS DATABASE (demo — hardcoded fallbacks)
-    // =====================================================
     const ACCOUNTS = [
       { username: "admin",  password: "hibatullah admin", role: "admin",  name: "Administrator" },
       { username: "hibatullah", password: "admin", role: "admin",  name: "Administrator" },
@@ -811,76 +459,89 @@
     ];
 
     // =====================================================
-    // ROLE SELECTOR
+    // VIEW TOGGLES
     // =====================================================
-    let selectedRole = "direktur";
-    document.querySelectorAll(".role-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".role-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        selectedRole = btn.getAttribute("data-role");
-      });
+    const viewLogin = document.getElementById("view-login");
+    const viewRegister = document.getElementById("view-register");
+    
+    document.getElementById("link-show-register").addEventListener("click", (e) => {
+      e.preventDefault();
+      viewLogin.style.display = "none";
+      viewRegister.style.display = "block";
+    });
+
+    document.getElementById("link-show-login").addEventListener("click", (e) => {
+      e.preventDefault();
+      viewRegister.style.display = "none";
+      viewLogin.style.display = "block";
     });
 
     // =====================================================
-    // TOGGLE PASSWORD VISIBILITY
+    // PASSWORD VISIBILITY TOGGLES
     // =====================================================
-    const passInput = document.getElementById("input-password");
-    const btnEye    = document.getElementById("btn-toggle-pass");
+    const eyeIconOpen = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+    const eyeIconClosed = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`;
 
-    btnEye.addEventListener("click", () => {
-      const isHidden = passInput.type === "password";
-      passInput.type = isHidden ? "text" : "password";
-      btnEye.innerHTML = isHidden
-        ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
-        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
-    });
-
-    // =====================================================
-    // DEMO AUTOFILL
-    // =====================================================
-    document.getElementById("demo-user").addEventListener("click", () => {
-      document.getElementById("input-username").value = "nama";
-    });
-    document.getElementById("demo-pass").addEventListener("click", () => {
-      document.getElementById("input-password").value = "hibatullah maju";
-    });
-
-    // =====================================================
-    // LOGIN FORM SUBMIT
-    // =====================================================
-    const loginForm  = document.getElementById("login-form");
-    const btnLogin   = document.getElementById("btn-login");
-    const errorMsg   = document.getElementById("error-msg");
-    const errorText  = document.getElementById("error-text");
-
-    function showError(msg) {
-      errorText.textContent = msg;
-      errorMsg.classList.add("show");
-      document.getElementById("input-username").style.borderColor = "#fca5a5";
-      document.getElementById("input-password").style.borderColor = "#fca5a5";
+    function togglePass(inputId, btnId) {
+      const input = document.getElementById(inputId);
+      const btnSvg = document.querySelector(`#${btnId} svg`);
+      const isHidden = input.type === "password";
+      input.type = isHidden ? "text" : "password";
+      btnSvg.innerHTML = isHidden ? eyeIconClosed : eyeIconOpen;
     }
 
-    function clearError() {
-      errorMsg.classList.remove("show");
-      document.getElementById("input-username").style.borderColor = "";
-      document.getElementById("input-password").style.borderColor = "";
+    document.getElementById("toggle-login-pass").addEventListener("click", () => togglePass("login-password", "toggle-login-pass"));
+    document.getElementById("toggle-reg-pass").addEventListener("click", () => togglePass("reg-password", "toggle-reg-pass"));
+
+    // =====================================================
+    // DEMO AUTOFILL (Mapped to Social Buttons)
+    // =====================================================
+    document.getElementById("demo-direktur").addEventListener("click", () => {
+      document.getElementById("login-email").value = "nama";
+      document.getElementById("login-password").value = "hibatullah maju";
+    });
+    document.getElementById("demo-inventaris").addEventListener("click", () => {
+      document.getElementById("login-email").value = "nama";
+      document.getElementById("login-password").value = "hibatullah 2030";
+    });
+    document.getElementById("demo-admin").addEventListener("click", () => {
+      document.getElementById("login-email").value = "admin";
+      document.getElementById("login-password").value = "hibatullah admin";
+    });
+
+    // =====================================================
+    // LOGIN LOGIC
+    // =====================================================
+    const loginForm = document.getElementById("login-form");
+    const btnLogin = document.getElementById("btn-login");
+    const loginErrText = document.getElementById("login-error-text");
+
+    function showLoginError(msg) {
+      loginErrText.textContent = msg;
+      loginErrText.classList.add("show");
+      document.getElementById("login-email").style.borderColor = "#ef4444";
+      document.getElementById("login-password").style.borderColor = "#ef4444";
     }
 
-    document.getElementById("input-username").addEventListener("input", clearError);
-    document.getElementById("input-password").addEventListener("input", clearError);
+    function clearLoginError() {
+      loginErrText.classList.remove("show");
+      document.getElementById("login-email").style.borderColor = "";
+      document.getElementById("login-password").style.borderColor = "";
+    }
+
+    document.getElementById("login-email").addEventListener("input", clearLoginError);
+    document.getElementById("login-password").addEventListener("input", clearLoginError);
 
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      clearError();
+      clearLoginError();
 
-      const username = document.getElementById("input-username").value.trim();
-      const password = document.getElementById("input-password").value;
+      const username = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
 
-      if (!username) { showError("Username tidak boleh kosong."); return; }
-      if (!password) { showError("Password tidak boleh kosong."); return; }
+      if (!username) { showLoginError("Email/Username tidak boleh kosong."); return; }
+      if (!password) { showLoginError("Password tidak boleh kosong."); return; }
 
-      // Loading state
       btnLogin.classList.add("loading");
       btnLogin.disabled = true;
 
@@ -909,37 +570,24 @@
             loginAt:  new Date().toISOString()
           }));
 
-          btnLogin.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Berhasil! Mengalihkan...</span>
-          `;
-          btnLogin.style.background = "linear-gradient(135deg, #059669, #10b981)";
-          btnLogin.style.boxShadow  = "0 8px 24px rgba(5,150,105,0.4)";
+          btnLogin.innerHTML = "<span>Berhasil! Mengalihkan...</span>";
+          btnLogin.style.background = "#10b981"; // Success green
 
           setTimeout(() => {
             if (account.role === "admin" || account.role === "direktur") window.location.href = "admin.html";
             else window.location.href = "index.html";
-          }, 900);
+          }, 800);
         } else {
           throw new Error("Username atau password salah.");
         }
       } catch (err) {
         btnLogin.classList.remove("loading");
         btnLogin.disabled = false;
-        showError("Username atau password salah. Coba lagi.");
-        const wrapper = document.querySelector(".login-wrapper");
-        wrapper.style.animation = "none";
-        wrapper.style.transform = "translateX(-8px)";
-        setTimeout(() => {
-          wrapper.style.transition = "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
-          wrapper.style.transform = "translateX(0)";
-        }, 50);
+        showLoginError("Username atau password salah. Coba lagi.");
       }
     });
 
-    // =====================================================
-    // CHECK IF ALREADY LOGGED IN
-    // =====================================================
+    // Check if already logged in
     const session = sessionStorage.getItem("spms_user");
     if (session) {
       try {
@@ -951,76 +599,47 @@
       }
     }
 
-    // Reset button state if returning via browser Back button (bfcache)
     window.addEventListener("pageshow", (e) => {
       if (e.persisted) {
         btnLogin.classList.remove("loading");
         btnLogin.disabled = false;
-        btnLogin.innerHTML = `
-          <svg class="btn-login-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          <span class="btn-login-text">Masuk ke Dashboard</span>
-          <div class="spinner"></div>
-        `;
+        btnLogin.innerHTML = "<span>Get Started</span><div class='spinner'></div>";
         btnLogin.style.background = "";
-        btnLogin.style.boxShadow = "";
       }
     });
+
     // =====================================================
     // REGISTER LOGIC
     // =====================================================
-    const viewLogin = document.getElementById("view-login");
-    const viewRegister = document.getElementById("view-register");
-    const titleEl = document.querySelector(".form-title");
-    const descEl = document.querySelector(".form-subtitle");
-    
-    document.getElementById("btn-show-register").addEventListener("click", (e) => {
-      e.preventDefault();
-      viewLogin.style.display = "none";
-      viewRegister.style.display = "block";
-      titleEl.textContent = "Buat Akun Baru";
-      descEl.textContent = "Daftarkan akun baru untuk akses sistem.";
-    });
-
-    document.getElementById("btn-show-login").addEventListener("click", (e) => {
-      e.preventDefault();
-      viewRegister.style.display = "none";
-      viewLogin.style.display = "block";
-      titleEl.textContent = "Masuk ke SPMS";
-      descEl.textContent = "Silakan masukkan akun Anda untuk mengakses sistem pengadaan sekolah.";
-    });
-
     let regRole = "inventaris";
-    document.querySelectorAll(".reg-role-btn").forEach(btn => {
+    document.querySelectorAll(".role-pill").forEach(btn => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".reg-role-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".role-pill").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         regRole = btn.getAttribute("data-role");
       });
     });
 
     const regForm = document.getElementById("register-form");
-    const regErrorMsg = document.getElementById("reg-error-msg");
-    const regErrorText = document.getElementById("reg-error-text");
+    const btnRegister = document.getElementById("btn-register");
+    const regErrText = document.getElementById("reg-error-text");
 
     regForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      regErrorMsg.classList.remove("show");
-      const user = document.getElementById("reg-username").value.trim();
+      regErrText.classList.remove("show");
+      const user = document.getElementById("reg-email").value.trim();
       const pass = document.getElementById("reg-password").value;
 
       if (!user || !pass) return;
 
-      const btnReg = document.getElementById("btn-register");
-      btnReg.classList.add("loading");
-      btnReg.disabled = true;
+      btnRegister.classList.add("loading");
+      btnRegister.disabled = true;
 
       try {
-        // Check if username already exists in hardcoded
+        // Check if username already exists
         if (ACCOUNTS.find(a => a.username === user)) {
           throw new Error("Email/Username sudah digunakan!");
         }
-
-        // Check SheetDB
         const checkRes = await fetch(`${AUTH_API_URL}/search?username=${user}`);
         const existingData = await checkRes.json();
         if (existingData && existingData.length > 0) {
@@ -1042,27 +661,22 @@
         });
 
         // Show success
-        btnReg.classList.remove("loading");
-        btnReg.innerHTML = `
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Akun Berhasil Dibuat!</span>
-        `;
-        btnReg.style.background = "linear-gradient(135deg, #059669, #10b981)";
+        btnRegister.classList.remove("loading");
+        btnRegister.innerHTML = "<span>Akun Dibuat!</span>";
+        btnRegister.style.background = "#10b981";
         
-        // Change the link below to say "Silakan Masuk"
-        const showLoginBtn = document.getElementById("btn-show-login");
-        showLoginBtn.innerHTML = "<strong>Akun siap digunakan. Silakan klik untuk Masuk!</strong>";
-        showLoginBtn.style.color = "var(--clr-primary)";
-        showLoginBtn.style.fontSize = "15px";
+        const showLoginBtn = document.getElementById("link-show-login");
+        showLoginBtn.innerHTML = "Akun siap digunakan. Klik untuk Masuk!";
+        showLoginBtn.style.color = "#10b981";
 
       } catch (err) {
-        btnReg.classList.remove("loading");
-        btnReg.disabled = false;
-        regErrorText.textContent = err.message || "Gagal menghubungi database.";
-        regErrorMsg.classList.add("show");
+        btnRegister.classList.remove("loading");
+        btnRegister.disabled = false;
+        regErrText.textContent = err.message || "Gagal menghubungi database.";
+        regErrText.classList.add("show");
       }
     });
-  </script>
 
+  </script>
 </body>
 </html>
