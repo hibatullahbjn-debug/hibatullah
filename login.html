@@ -640,13 +640,14 @@
       <form class="login-form" id="login-form" novalidate>
 
         <!-- Username -->
-        <div class="field-group">
-          <label class="field-label" for="input-username">Username</label>
-          <div class="field-input-wrap">
-            <span class="field-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </span>
-            <input type="text" id="input-username" class="field-input" placeholder="Masukkan username..." autocomplete="username" spellcheck="false">
+          <div class="field-group">
+            <label class="field-label" for="input-username">Username</label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input type="text" id="input-username" class="field-input" placeholder="Masukkan username..." autocomplete="username" spellcheck="false">
+            </div>
           </div>
         </div>
 
@@ -698,13 +699,77 @@
           </div>
         </div>
       </div>
+      </div>
+      </div> <!-- End view-login -->
+
+      <!-- REGISTER VIEW -->
+      <div id="view-register" style="display: none;">
+        <form id="register-form">
+          <div class="field-group">
+            <label class="field-label">Pilih Peran Akun</label>
+            <div class="role-selector" style="margin-bottom: 20px;">
+              <button type="button" class="role-btn reg-role-btn active" data-role="inventaris">
+                <div class="role-btn-icon">📦</div>
+                <span class="role-btn-label">Inventaris</span>
+              </button>
+              <button type="button" class="role-btn reg-role-btn" data-role="direktur">
+                <div class="role-btn-icon">👑</div>
+                <span class="role-btn-label">Direktur</span>
+              </button>
+              <button type="button" class="role-btn reg-role-btn" data-role="admin">
+                <div class="role-btn-icon">🛡️</div>
+                <span class="role-btn-label">Admin</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="field-group">
+            <label class="field-label" for="reg-username">Email / Username Baru</label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <input type="text" id="reg-username" class="field-input" placeholder="contoh@gmail.com / username" required autocomplete="off">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="reg-password">Password Baru</label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input type="password" id="reg-password" class="field-input" placeholder="Buat password..." required>
+            </div>
+          </div>
+
+          <div class="error-msg" id="reg-error-msg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="reg-error-text">Email sudah digunakan.</span>
+          </div>
+
+          <button type="submit" class="btn-login" id="btn-register">
+            <span class="btn-login-text">Buat Akun</span>
+            <div class="spinner"></div>
+          </button>
+          <div style="text-align: center; margin-top: 15px;">
+            <a href="#" id="btn-show-login" style="color: var(--clr-muted); font-size: 14px; text-decoration: none;">Kembali ke Halaman Login</a>
+          </div>
+        </form>
+      </div>
+
     </div>
 
   </div>
 
   <script>
     // =====================================================
-    // ACCOUNTS DATABASE (demo — in production use backend)
+    // AUTHENTICATION API
+    // =====================================================
+    const AUTH_API_URL = "https://sheetdb.io/api/v1/2hbuzs32m6bvw";
+
+    // =====================================================
+    // ACCOUNTS DATABASE (demo — hardcoded fallbacks)
     // =====================================================
     const ACCOUNTS = [
       { username: "admin",  password: "hibatullah admin", role: "admin",  name: "Administrator" },
@@ -773,7 +838,7 @@
     document.getElementById("input-username").addEventListener("input", clearError);
     document.getElementById("input-password").addEventListener("input", clearError);
 
-    loginForm.addEventListener("submit", (e) => {
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       clearError();
 
@@ -787,23 +852,24 @@
       btnLogin.classList.add("loading");
       btnLogin.disabled = true;
 
-      // Simulate auth delay (realistic UX)
-      setTimeout(() => {
+      try {
         let account = ACCOUNTS.find(a => a.username === username && a.password === password);
         
-        // Handle "any username other than admin/direktur" with password "hibatullah 2030"
         if (!account && username !== "admin" && username !== "nama" && password === "hibatullah 2030") {
           account = { username: username, password: password, role: "inventaris", name: username.charAt(0).toUpperCase() + username.slice(1) };
         }
 
-        // Check local DB
+        // Check SheetDB API
         if (!account) {
-          const localDB = JSON.parse(localStorage.getItem("spms_users_db") || "[]");
-          account = localDB.find(a => a.username === username && a.password === password);
+          const res = await fetch(`${AUTH_API_URL}/search?username=${username}`);
+          const data = await res.json();
+          if (data && data.length > 0) {
+            const userMatch = data.find(u => u.password === password);
+            if (userMatch) account = userMatch;
+          }
         }
 
         if (account) {
-          // Save session
           sessionStorage.setItem("spms_user", JSON.stringify({
             username: account.username,
             name:     account.name,
@@ -811,7 +877,6 @@
             loginAt:  new Date().toISOString()
           }));
 
-          // Success animation — redirect
           btnLogin.innerHTML = `
             <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             <span>Berhasil! Mengalihkan...</span>
@@ -820,28 +885,24 @@
           btnLogin.style.boxShadow  = "0 8px 24px rgba(5,150,105,0.4)";
 
           setTimeout(() => {
-            if (account.role === "admin" || account.role === "direktur") {
-              window.location.href = "admin.html";
-            } else {
-              window.location.href = "index.html";
-            }
+            if (account.role === "admin" || account.role === "direktur") window.location.href = "admin.html";
+            else window.location.href = "index.html";
           }, 900);
-
         } else {
-          btnLogin.classList.remove("loading");
-          btnLogin.disabled = false;
-          showError("Username atau password salah. Coba lagi.");
-
-          // Shake animation
-          const wrapper = document.querySelector(".login-wrapper");
-          wrapper.style.animation = "none";
-          wrapper.style.transform = "translateX(-8px)";
-          setTimeout(() => {
-            wrapper.style.transition = "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
-            wrapper.style.transform = "translateX(0)";
-          }, 50);
+          throw new Error("Username atau password salah.");
         }
-      }, 1000);
+      } catch (err) {
+        btnLogin.classList.remove("loading");
+        btnLogin.disabled = false;
+        showError("Username atau password salah. Coba lagi.");
+        const wrapper = document.querySelector(".login-wrapper");
+        wrapper.style.animation = "none";
+        wrapper.style.transform = "translateX(-8px)";
+        setTimeout(() => {
+          wrapper.style.transition = "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
+          wrapper.style.transform = "translateX(0)";
+        }, 50);
+      }
     });
 
     // =====================================================
@@ -909,7 +970,7 @@
     const regErrorMsg = document.getElementById("reg-error-msg");
     const regErrorText = document.getElementById("reg-error-text");
 
-    regForm.addEventListener("submit", (e) => {
+    regForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       regErrorMsg.classList.remove("show");
       const user = document.getElementById("reg-username").value.trim();
@@ -917,44 +978,57 @@
 
       if (!user || !pass) return;
 
-      const localDB = JSON.parse(localStorage.getItem("spms_users_db") || "[]");
-      
-      // Check if username already exists in hardcoded or local DB
-      if (ACCOUNTS.find(a => a.username === user) || localDB.find(a => a.username === user)) {
-        regErrorText.textContent = "Username sudah digunakan!";
-        regErrorMsg.classList.add("show");
-        return;
-      }
-
-      // Save to local DB
-      localDB.push({
-        username: user,
-        password: pass,
-        role: regRole,
-        name: user.charAt(0).toUpperCase() + user.slice(1)
-      });
-      localStorage.setItem("spms_users_db", JSON.stringify(localDB));
-
-      // Show success and auto login
       const btnReg = document.getElementById("btn-register");
-      btnReg.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        <span>Akun Berhasil Dibuat!</span>
-      `;
-      btnReg.style.background = "linear-gradient(135deg, #059669, #10b981)";
-      
-      // Auto login logic
-      sessionStorage.setItem("spms_user", JSON.stringify({
-        username: user,
-        name: user.charAt(0).toUpperCase() + user.slice(1),
-        role: regRole,
-        loginAt: new Date().toISOString()
-      }));
+      btnReg.classList.add("loading");
+      btnReg.disabled = true;
 
-      setTimeout(() => {
-        if (regRole === "admin" || regRole === "direktur") window.location.href = "admin.html";
-        else window.location.href = "index.html";
-      }, 1000);
+      try {
+        // Check if username already exists in hardcoded
+        if (ACCOUNTS.find(a => a.username === user)) {
+          throw new Error("Email/Username sudah digunakan!");
+        }
+
+        // Check SheetDB
+        const checkRes = await fetch(`${AUTH_API_URL}/search?username=${user}`);
+        const existingData = await checkRes.json();
+        if (existingData && existingData.length > 0) {
+          throw new Error("Email/Username sudah digunakan!");
+        }
+
+        // Save to SheetDB
+        const newUser = {
+          username: user,
+          password: pass,
+          role: regRole,
+          name: user.split("@")[0].charAt(0).toUpperCase() + user.split("@")[0].slice(1)
+        };
+
+        await fetch(AUTH_API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: [newUser] })
+        });
+
+        // Show success
+        btnReg.classList.remove("loading");
+        btnReg.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Akun Berhasil Dibuat!</span>
+        `;
+        btnReg.style.background = "linear-gradient(135deg, #059669, #10b981)";
+        
+        // Change the link below to say "Silakan Masuk"
+        const showLoginBtn = document.getElementById("btn-show-login");
+        showLoginBtn.innerHTML = "<strong>Akun siap digunakan. Silakan klik untuk Masuk!</strong>";
+        showLoginBtn.style.color = "var(--clr-primary)";
+        showLoginBtn.style.fontSize = "15px";
+
+      } catch (err) {
+        btnReg.classList.remove("loading");
+        btnReg.disabled = false;
+        regErrorText.textContent = err.message || "Gagal menghubungi database.";
+        regErrorMsg.classList.add("show");
+      }
     });
   </script>
 
