@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPMS — Login</title>
+  <meta name="description" content="Login ke Sistem Pengadaan & Manajemen Sekolah (SPMS)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* =====================================================
+       RESET & BASE
+    ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #080f1e;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Animated Background ---- */
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(255,107,0,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 90%, rgba(37,99,235,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 60% 40%, rgba(5,150,105,0.08) 0%, transparent 60%),
+        #080f1e;
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: floatOrb 12s ease-in-out infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .orb-1 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,107,0,0.5), transparent);
+      top: -100px; left: -100px;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(37,99,235,0.4), transparent);
+      bottom: -80px; right: -80px;
+      animation-delay: -4s;
+    }
+
+    .orb-3 {
+      width: 250px; height: 250px;
+      background: radial-gradient(circle, rgba(5,150,105,0.3), transparent);
+      top: 50%; left: 60%;
+      animation-delay: -8s;
+    }
+
+    @keyframes floatOrb {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(30px, -20px) scale(1.05); }
+      66%       { transform: translate(-20px, 30px) scale(0.95); }
+    }
+
+    /* Grid lines decoration */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* =====================================================
+       MAIN LAYOUT: Split Panel
+    ===================================================== */
+    .login-wrapper {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      width: 100%;
+      max-width: 960px;
+      min-height: 580px;
+      margin: 20px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+      animation: wrapperIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes wrapperIn {
+      from { opacity: 0; transform: scale(0.94) translateY(30px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ---- Left Panel: Branding ---- */
+    .brand-panel {
+      flex: 1;
+      background: linear-gradient(145deg, #0f1f3d 0%, #0c1220 50%, #0a1628 100%);
+      padding: 52px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Decorative arc */
+    .brand-panel::after {
+      content: '';
+      position: absolute;
+      right: -120px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 300px;
+      height: 300px;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+
+    .brand-panel::before {
+      content: '';
+      position: absolute;
+      right: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 180px;
+      height: 180px;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-mark {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #ff6b00, #ff9240);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(255,107,0,0.4);
+    }
+
+    .brand-logo-mark svg { width: 24px; height: 24px; }
+
+    .brand-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      color: #fff;
+    }
+
+    .brand-tagline {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      font-weight: 500;
+    }
+
+    .brand-hero {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,107,0,0.15);
+      border: 1px solid rgba(255,107,0,0.25);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ff9240;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .brand-eyebrow-dot {
+      width: 6px; height: 6px;
+      background: #ff9240;
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    .brand-title {
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    .brand-title span {
+      background: linear-gradient(90deg, #ff9240, #ffcc00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .brand-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.7;
+      max-width: 300px;
+    }
+
+    /* Feature pills */
+    .brand-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .feature-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feature-icon svg { width: 14px; height: 14px; }
+
+    /* ---- Right Panel: Form ---- */
+    .form-panel {
+      width: 420px;
+      background: #ffffff;
+      padding: 52px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .form-panel-header {
+      margin-bottom: 36px;
+    }
+
+    .form-greeting {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ff6b00;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .form-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .form-subtitle {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    /* Form Fields */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .field-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .field-icon {
+      position: absolute;
+      left: 14px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+    }
+
+    .field-icon svg { width: 16px; height: 16px; }
+
+    .field-input {
+      width: 100%;
+      padding: 13px 16px 13px 42px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #0f172a;
+      font-family: inherit;
+      background: #f8fafc;
+      transition: all 0.25s ease;
+      outline: none;
+    }
+
+    .field-input:focus {
+      border-color: #ff6b00;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(255,107,0,0.1);
+    }
+
+    .field-input::placeholder { color: #cbd5e1; }
+
+    /* Toggle password visibility */
+    .btn-eye {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
+      padding: 2px;
+    }
+
+    .btn-eye:hover { color: #ff6b00; }
+    .btn-eye svg { width: 16px; height: 16px; }
+
+    /* Role selector */
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .role-btn {
+      padding: 10px 6px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .role-btn-icon {
+      font-size: 18px;
+      margin-bottom: 3px;
+    }
+
+    .role-btn-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.3px;
+    }
+
+    .role-btn:hover {
+      border-color: rgba(255,107,0,0.4);
+      background: rgba(255,107,0,0.04);
+    }
+
+    .role-btn.active {
+      border-color: #ff6b00;
+      background: rgba(255,107,0,0.07);
+    }
+
+    .role-btn.active .role-btn-label { color: #ff6b00; }
+
+    /* Error state */
+    .error-msg {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #fff1f0;
+      border: 1px solid #ffc5c0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #dc2626;
+    }
+
+    .error-msg.show { display: flex; }
+    .error-msg svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+    /* Submit button */
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #ff6b00, #ff8c3a);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(255,107,0,0.35);
+      margin-top: 4px;
+      letter-spacing: 0.2px;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(255,107,0,0.45);
+    }
+
+    .btn-login:active { transform: translateY(0); }
+    .btn-login svg { width: 18px; height: 18px; }
+
+    /* Loading spinner inside button */
+    .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .btn-login.loading .spinner { display: block; }
+    .btn-login.loading .btn-login-text,
+    .btn-login.loading .btn-login-icon { display: none; }
+
+    /* Demo credentials hint */
+    .demo-hint {
+      margin-top: 20px;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .demo-hint-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #0369a1;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .demo-hint-title svg { width: 13px; height: 13px; }
+
+    .demo-rows { display: flex; flex-direction: column; gap: 4px; }
+
+    .demo-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .demo-key { color: #64748b; font-weight: 600; }
+    .demo-val {
+      font-weight: 700;
+      color: #0369a1;
+      background: rgba(14,165,233,0.1);
+      padding: 1px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: monospace;
+      font-size: 12px;
+      transition: background 0.2s;
+    }
+
+    .demo-val:hover { background: rgba(14,165,233,0.2); }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+    @media (max-width: 780px) {
+      .brand-panel { display: none; }
+      .login-wrapper { max-width: 440px; border-radius: 24px; }
+      .form-panel { width: 100%; padding: 40px 32px; }
+    }
+
+    @media (max-width: 480px) {
+      .form-panel { padding: 32px 24px; }
+      .login-wrapper { margin: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-gradient"></div>
+  <div class="bg-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="login-wrapper">
+
+    <!-- ===== LEFT: Branding ===== -->
+    <div class="brand-panel">
+      <div class="brand-logo">
+        <div class="brand-logo-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="brand-logo-text">
+          <span class="brand-name">SPMS</span>
+          <span class="brand-tagline">Procurement System</span>
+        </div>
+      </div>
+
+      <div class="brand-hero">
+        <div class="brand-eyebrow">
+          <span class="brand-eyebrow-dot"></span>
+          Platform Pengadaan
+        </div>
+        <h2 class="brand-title">Kelola Pengadaan<br>Sekolah <span>Lebih Cerdas</span></h2>
+        <p class="brand-desc">Sistem terpadu untuk manajemen pengadaan barang Kepesantrenan, SMK, dan SMP — efisien, transparan, dan terstruktur.</p>
+      </div>
+
+      <div class="brand-features">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ff9240" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          Pengadaan 3 Unit Sekolah Terintegrasi
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          Tanda Tangan Digital Terverifikasi
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          Laporan & Statistik Real-time
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RIGHT: Form ===== -->
+    <div class="form-panel">
+      <div class="form-panel-header">
+        <p class="form-greeting">Selamat Datang 👋</p>
+        <h1 class="form-title">Masuk ke SPMS</h1>
+        <p class="form-subtitle">Silakan masukkan akun Anda untuk mengakses sistem pengadaan sekolah.</p>
+      </div>
+
+      <!-- Role Selector -->
+      <div class="field-group" style="margin-bottom: 6px;">
+        <label class="field-label">Masuk sebagai</label>
+        <div class="role-selector">
+          <button type="button" class="role-btn active" data-role="direktur" id="role-direktur">
+            <div class="role-btn-icon">👔</div>
+            <span class="role-btn-label">Direktur</span>
+          </button>
+          <button type="button" class="role-btn" data-role="inventaris" id="role-inventaris">
+            <div class="role-btn-icon">📦</div>
+            <span class="role-btn-label">Inventaris</span>
+          </button>
+          <button type="button" class="role-btn" data-role="admin" id="role-admin">
+            <div class="role-btn-icon">🛡️</div>
+            <span class="role-btn-label">Admin</span>
+          </button>
+        </div>
+      </div>
+
+      <form class="login-form" id="login-form" novalidate>
+
+        <!-- Username -->
+        <div class="field-group">
+          <label class="field-label" for="input-username">Username</label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+            <input type="text" id="input-username" class="field-input" placeholder="Masukkan username..." autocomplete="username" spellcheck="false">
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="field-group">
+          <label class="field-label" for="input-password">Password</label>
+          <div class="field-input-wrap">
+            <span class="field-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <input type="password" id="input-password" class="field-input" placeholder="Masukkan password..." autocomplete="current-password">
+            <button type="button" class="btn-eye" id="btn-toggle-pass" title="Lihat password">
+              <svg id="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-msg" id="error-msg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="error-text">Username atau password salah.</span>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-login" id="btn-login">
+          <svg class="btn-login-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          <span class="btn-login-text">Masuk ke Dashboard</span>
+          <div class="spinner"></div>
+        </button>
+        <div style="text-align: center; margin-top: 15px;">
+          <a href="#" id="btn-show-register" style="color: var(--clr-primary); font-size: 14px; text-decoration: none; font-weight: 500;">Belum punya akun? Buat Akun Baru</a>
+        </div>
+      </form>
+
+      <!-- Demo Credentials -->
+      <div class="demo-hint">
+        <div class="demo-hint-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Demo Akun — Klik untuk salin
+        </div>
+        <div class="demo-rows">
+          <div class="demo-row">
+            <span class="demo-key">Username</span>
+            <span class="demo-val" id="demo-user" title="Klik untuk isi otomatis">nama</span>
+          </div>
+          <div class="demo-row">
+            <span class="demo-key">Password</span>
+            <span class="demo-val" id="demo-pass" title="Klik untuk isi otomatis">hibatullah maju</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // =====================================================
+    // ACCOUNTS DATABASE (demo — in production use backend)
+    // =====================================================
+    const ACCOUNTS = [
+      { username: "admin",  password: "hibatullah admin", role: "admin",  name: "Administrator" },
+      { username: "hibatullah", password: "admin", role: "admin",  name: "Administrator" },
+      { username: "nama",  password: "hibatullah maju",  role: "direktur",   name: "Direktur" },
+      { username: "nama", password: "hibatullah 2030",  role: "inventaris",  name: "Inventaris" }
+    ];
+
+    // =====================================================
+    // ROLE SELECTOR
+    // =====================================================
+    let selectedRole = "direktur";
+    document.querySelectorAll(".role-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".role-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedRole = btn.getAttribute("data-role");
+      });
+    });
+
+    // =====================================================
+    // TOGGLE PASSWORD VISIBILITY
+    // =====================================================
+    const passInput = document.getElementById("input-password");
+    const btnEye    = document.getElementById("btn-toggle-pass");
+
+    btnEye.addEventListener("click", () => {
+      const isHidden = passInput.type === "password";
+      passInput.type = isHidden ? "text" : "password";
+      btnEye.innerHTML = isHidden
+        ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    });
+
+    // =====================================================
+    // DEMO AUTOFILL
+    // =====================================================
+    document.getElementById("demo-user").addEventListener("click", () => {
+      document.getElementById("input-username").value = "nama";
+    });
+    document.getElementById("demo-pass").addEventListener("click", () => {
+      document.getElementById("input-password").value = "hibatullah maju";
+    });
+
+    // =====================================================
+    // LOGIN FORM SUBMIT
+    // =====================================================
+    const loginForm  = document.getElementById("login-form");
+    const btnLogin   = document.getElementById("btn-login");
+    const errorMsg   = document.getElementById("error-msg");
+    const errorText  = document.getElementById("error-text");
+
+    function showError(msg) {
+      errorText.textContent = msg;
+      errorMsg.classList.add("show");
+      document.getElementById("input-username").style.borderColor = "#fca5a5";
+      document.getElementById("input-password").style.borderColor = "#fca5a5";
+    }
+
+    function clearError() {
+      errorMsg.classList.remove("show");
+      document.getElementById("input-username").style.borderColor = "";
+      document.getElementById("input-password").style.borderColor = "";
+    }
+
+    document.getElementById("input-username").addEventListener("input", clearError);
+    document.getElementById("input-password").addEventListener("input", clearError);
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      clearError();
+
+      const username = document.getElementById("input-username").value.trim();
+      const password = document.getElementById("input-password").value;
+
+      if (!username) { showError("Username tidak boleh kosong."); return; }
+      if (!password) { showError("Password tidak boleh kosong."); return; }
+
+      // Loading state
+      btnLogin.classList.add("loading");
+      btnLogin.disabled = true;
+
+      // Simulate auth delay (realistic UX)
+      setTimeout(() => {
+        let account = ACCOUNTS.find(a => a.username === username && a.password === password);
+        
+        // Handle "any username other than admin/direktur" with password "hibatullah 2030"
+        if (!account && username !== "admin" && username !== "nama" && password === "hibatullah 2030") {
+          account = { username: username, password: password, role: "inventaris", name: username.charAt(0).toUpperCase() + username.slice(1) };
+        }
+
+        // Check local DB
+        if (!account) {
+          const localDB = JSON.parse(localStorage.getItem("spms_users_db") || "[]");
+          account = localDB.find(a => a.username === username && a.password === password);
+        }
+
+        if (account) {
+          // Save session
+          sessionStorage.setItem("spms_user", JSON.stringify({
+            username: account.username,
+            name:     account.name,
+            role:     account.role,
+            loginAt:  new Date().toISOString()
+          }));
+
+          // Success animation — redirect
+          btnLogin.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Berhasil! Mengalihkan...</span>
+          `;
+          btnLogin.style.background = "linear-gradient(135deg, #059669, #10b981)";
+          btnLogin.style.boxShadow  = "0 8px 24px rgba(5,150,105,0.4)";
+
+          setTimeout(() => {
+            if (account.role === "admin" || account.role === "direktur") {
+              window.location.href = "admin.html";
+            } else {
+              window.location.href = "index.html";
+            }
+          }, 900);
+
+        } else {
+          btnLogin.classList.remove("loading");
+          btnLogin.disabled = false;
+          showError("Username atau password salah. Coba lagi.");
+
+          // Shake animation
+          const wrapper = document.querySelector(".login-wrapper");
+          wrapper.style.animation = "none";
+          wrapper.style.transform = "translateX(-8px)";
+          setTimeout(() => {
+            wrapper.style.transition = "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
+            wrapper.style.transform = "translateX(0)";
+          }, 50);
+        }
+      }, 1000);
+    });
+
+    // =====================================================
+    // CHECK IF ALREADY LOGGED IN
+    // =====================================================
+    const session = sessionStorage.getItem("spms_user");
+    if (session) {
+      try {
+        const parsed = JSON.parse(session);
+        if (parsed.role === "admin" || parsed.role === "direktur") window.location.href = "admin.html";
+        else window.location.href = "index.html";
+      } catch (e) {
+        window.location.href = "index.html";
+      }
+    }
+
+    // Reset button state if returning via browser Back button (bfcache)
+    window.addEventListener("pageshow", (e) => {
+      if (e.persisted) {
+        btnLogin.classList.remove("loading");
+        btnLogin.disabled = false;
+        btnLogin.innerHTML = `
+          <svg class="btn-login-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          <span class="btn-login-text">Masuk ke Dashboard</span>
+          <div class="spinner"></div>
+        `;
+        btnLogin.style.background = "";
+        btnLogin.style.boxShadow = "";
+      }
+    });
+    // =====================================================
+    // REGISTER LOGIC
+    // =====================================================
+    const viewLogin = document.getElementById("view-login");
+    const viewRegister = document.getElementById("view-register");
+    const titleEl = document.querySelector(".title-main");
+    const descEl = document.querySelector(".title-sub");
+    
+    document.getElementById("btn-show-register").addEventListener("click", (e) => {
+      e.preventDefault();
+      viewLogin.style.display = "none";
+      viewRegister.style.display = "block";
+      titleEl.textContent = "Buat Akun";
+      descEl.textContent = "Daftarkan akun baru untuk akses sistem.";
+    });
+
+    document.getElementById("btn-show-login").addEventListener("click", (e) => {
+      e.preventDefault();
+      viewRegister.style.display = "none";
+      viewLogin.style.display = "block";
+      titleEl.textContent = "Selamat Datang";
+      descEl.textContent = "Masukkan kredensial Anda untuk masuk ke dalam sistem.";
+    });
+
+    let regRole = "inventaris";
+    document.querySelectorAll(".reg-role-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".reg-role-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        regRole = btn.getAttribute("data-role");
+      });
+    });
+
+    const regForm = document.getElementById("register-form");
+    const regErrorMsg = document.getElementById("reg-error-msg");
+    const regErrorText = document.getElementById("reg-error-text");
+
+    regForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      regErrorMsg.classList.remove("show");
+      const user = document.getElementById("reg-username").value.trim();
+      const pass = document.getElementById("reg-password").value;
+
+      if (!user || !pass) return;
+
+      const localDB = JSON.parse(localStorage.getItem("spms_users_db") || "[]");
+      
+      // Check if username already exists in hardcoded or local DB
+      if (ACCOUNTS.find(a => a.username === user) || localDB.find(a => a.username === user)) {
+        regErrorText.textContent = "Username sudah digunakan!";
+        regErrorMsg.classList.add("show");
+        return;
+      }
+
+      // Save to local DB
+      localDB.push({
+        username: user,
+        password: pass,
+        role: regRole,
+        name: user.charAt(0).toUpperCase() + user.slice(1)
+      });
+      localStorage.setItem("spms_users_db", JSON.stringify(localDB));
+
+      // Show success and auto login
+      const btnReg = document.getElementById("btn-register");
+      btnReg.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Akun Berhasil Dibuat!</span>
+      `;
+      btnReg.style.background = "linear-gradient(135deg, #059669, #10b981)";
+      
+      // Auto login logic
+      sessionStorage.setItem("spms_user", JSON.stringify({
+        username: user,
+        name: user.charAt(0).toUpperCase() + user.slice(1),
+        role: regRole,
+        loginAt: new Date().toISOString()
+      }));
+
+      setTimeout(() => {
+        if (regRole === "admin" || regRole === "direktur") window.location.href = "admin.html";
+        else window.location.href = "index.html";
+      }, 1000);
+    });
+  </script>
+
+</body>
+</html>
